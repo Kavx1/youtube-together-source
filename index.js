@@ -3,7 +3,7 @@ require("dotenv").config();
 const { Client } = require("discord.js");
 const fetch = require("node-fetch");
 const client = new Client();
-const PREFIX = "m_";
+const PREFIX = "a!";
 
 const ACTIVITIES = {
     "poker": {
@@ -24,7 +24,7 @@ const ACTIVITIES = {
     }
 };
 
-client.on("ready", () => console.log("Bot is ready"));
+client.on("ready", () => console.log("Bot is online!"));
 client.on("warn", console.warn);
 client.on("error", console.error);
 
@@ -39,8 +39,8 @@ client.on("message", async message => {
 
     if (cmd === "yttogether") {
         const channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0]);
-        if (!channel || channel.type !== "voice") return message.channel.send("NOOB | Invalid channel specified!");
-        if (!channel.permissionsFor(message.guild.me).has("CREATE_INSTANT_INVITE")) return message.channel.send("WTF BRO.. | I need `CREATE_INSTANT_INVITE` permission");
+        if (!channel || channel.type !== "voice") return message.channel.send("❌ | Invalid channel specified!");
+        if (!channel.permissionsFor(message.guild.me).has("CREATE_INSTANT_INVITE")) return message.channel.send("❌ | I need `CREATE_INSTANT_INVITE` permission");
 
         fetch(`https://discord.com/api/v8/channels/${channel.id}/invites`, {
             method: "POST",
@@ -59,21 +59,21 @@ client.on("message", async message => {
         })
             .then(res => res.json())
             .then(invite => {
-                if (invite.error || !invite.code) return message.channel.send("WTF | Could not start **YouTube Together**!");
-                message.channel.send(`ALRIGHT! | Click here to start **YouTube Together** in ${channel.name}: <https://discord.gg/${invite.code}>`);
+                if (invite.error || !invite.code) return message.channel.send("❌ | Could not start **YouTube Together**!");
+                message.channel.send(`✅ | Click here to start **YouTube Together** in ${channel.name}: <https://discord.gg/${invite.code}>`);
             })
             .catch(e => {
-                message.channel.send("DUDE.. | Could not start **YouTube Together**!");
+                message.channel.send("❌ | Could not start **YouTube Together**!");
             })
     }
     
     // or use this
     if (cmd === "activity") {
         const channel = message.guild.channels.cache.get(args[0]);
-        if (!channel || channel.type !== "voice") return message.channel.send("NOOB | Invalid channel specified!");
-        if (!channel.permissionsFor(message.guild.me).has("CREATE_INSTANT_INVITE")) return message.channel.send("WTF BRO.. | I need `CREATE_INSTANT_INVITE` permission");
+        if (!channel || channel.type !== "voice") return message.channel.send("❌ | Invalid channel specified!");
+        if (!channel.permissionsFor(message.guild.me).has("CREATE_INSTANT_INVITE")) return message.channel.send("❌ | I need `CREATE_INSTANT_INVITE` permission");
         const activity = ACTIVITIES[args[1] ? args[1].toLowerCase() : null];
-        if (!activity) return message.channel.send(`HEY! | Correct formats:\n${Object.keys(ACTIVITIES).map(m => `- **${PREFIX}activity <Channel_ID> ${m}**`).join("\n")}`);
+        if (!activity) return message.channel.send(`❌ | Correct formats:\n${Object.keys(ACTIVITIES).map(m => `- **${PREFIX}activity <Channel_ID> ${m}**`).join("\n")}`);
 
         fetch(`https://discord.com/api/v8/channels/${channel.id}/invites`, {
             method: "POST",
@@ -92,11 +92,11 @@ client.on("message", async message => {
         })
             .then(res => res.json())
             .then(invite => {
-                if (invite.error || !invite.code) return message.channel.send(`WTF | Could not start **${activity.name}**!`);
-                message.channel.send(`ALRIGHT! | Click here to start **${activity.name}** in **${channel.name}**: <https://discord.gg/${invite.code}>`);
+                if (invite.error || !invite.code) return message.channel.send(`❌ | Could not start **${activity.name}**!`);
+                message.channel.send(`✅ | Click here to start **${activity.name}** in **${channel.name}**: <https://discord.gg/${invite.code}>`);
             })
             .catch(e => {
-                message.channel.send(`DUDE.. | Could not start **${activity.name}**!`);
+                message.channel.send(`❌ | Could not start **${activity.name}**!`);
             })
     }
 });
